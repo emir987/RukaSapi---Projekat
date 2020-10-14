@@ -595,11 +595,11 @@ if (isset($_SESSION['id'])){
     }
 
 
-    function openEdit(comment, id) {
+   function openEdit(comment, id) {
         document.getElementById('comment' + id).innerHTML = '<div class="row">' +
             '<textarea class="form-control" rows="2" style="width: 90%;" id="newComment" type="text">' + comment + '</textarea>' +
-            '<span onclick="closeEdit(' + id + ',\'' + comment + '\')" id="deletePet" class="close mx-2">&times;</span>' +
-            '<span onclick="editConfirm(' + id + ')" class="close">&#10003;</span></div>';
+            '<span onclick="closeEdit(' + id + ',\'' + comment + '\')" style="cursor:pointer;font-size:1.2rem" id="deletePet" class="mx-2">&times;</span>' +
+            '<span onclick="editConfirm(' + id + ')" style="cursor:pointer">&#10003;</span></div>';
     }
 
 
