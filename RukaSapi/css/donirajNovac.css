@@ -1,0 +1,293 @@
+.container-input {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container-input input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container-input:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container-input input:checked~.checkmark {
+    background-color: #969696;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container-input input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container-input .checkmark:after {
+    top: 7px;
+    left: 7px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+
+.main_content {
+    margin-top: 120px;
+    overflow: hidden;
+}
+
+.slika {
+    flex-basis: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+@media only screen and (max-width: 767px) {
+
+    #user-data-form .form-group{
+        flex-direction: column;
+        margin: 0;
+    }
+
+    #promjena_svote{
+        display: flex;
+    }
+
+    #promjena_svote >div{
+        margin-right: 10px;
+    }
+
+    .potvrdi {
+        margin-top: 21px !important;
+        margin-bottom: 0px !important;
+        padding: 3px 14px !important;
+    }
+
+    #user-data-form .form-group input{
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .slika{
+        flex-basis: 0;
+        min-width: 0;
+        max-width: 0;
+    }
+    .content{
+        flex-basis: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+    }
+}
+
+.content {
+    flex-basis: 70%;
+    min-width: 70%;
+    max-width: 70%;
+    padding-left: 10%;
+}
+
+.grid-svota {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.svota {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 18px 5px;
+    text-align: center;
+    font-weight: 500;
+    transition: all .2s;
+}
+
+.svota-inp:checked~label {
+    background-color: #b4ab00;
+    color: white;
+}
+
+.svota:hover {
+    background-color: #5a5a5a;
+    color: white;
+    cursor: pointer;
+}
+
+.svota-inp {
+    position: absolute;
+    z-index: -1;
+    width: 0;
+}
+
+.input-group-text {
+    border-radius: 0;
+    border-right: none;
+}
+
+label {
+    margin: 0;
+}
+
+.dvije_kolone {
+    grid-column: span 2;
+}
+
+.nacin-placanja {
+    border: 1px solid rgb(139, 139, 139);
+    padding: 14px 2px;
+    background-color: rgb(236, 236, 236);
+    text-align: center;
+    font-weight: 500;
+    width: 100%;
+    transition: all .2s;
+}
+
+.nacin-placanja:first-child {
+    margin-right: 16px;
+}
+
+.nacin-placanja:hover {
+    background-color: #5a5a5a;
+    color: white;
+    cursor: pointer;
+}
+
+
+/* plati stranica */
+
+.container-custom {
+    max-width: 728px;
+    margin: 0 auto;
+    margin-top: 120px;
+    padding: 0 16px;
+}
+
+.donirate-tab {
+    padding: 8px;
+    background-color: rgb(235, 235, 235);
+}
+
+.donirate-tab a {
+    margin-left: 20px;
+}
+
+.sakrij_svota{
+    display: none;
+}
+
+.potvrdi{
+    background-color: #595CF3; /* Green */
+    border: none;
+    color: white;
+    padding: 6px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+
+/* checkbox */
+
+.container-check {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container-check input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark-check {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container-check:hover input ~ .checkmark-check {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-check input:checked ~ .checkmark-check {
+  background-color: #595CF3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark-check:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container-check input:checked ~ .checkmark-check:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-check .checkmark-check:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

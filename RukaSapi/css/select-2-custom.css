@@ -1,0 +1,59 @@
+  /* ========================== select2 edited ============================ */
+  .select2 {
+      width: 100% !important;
+  }
+
+  .select2-container--default .select2-selection--single[aria-expanded="false"] .select2-selection__arrow b {
+      border-width: 10px 8px 0 8px;
+      border-color: rgb(192, 192, 192) transparent transparent transparent;
+  }
+
+  .select2-container--default .select2-selection--single[aria-expanded="true"] .select2-selection__arrow b {
+      border-width: 0 8px 10px 8px;
+      border-color: transparent transparent rgb(192, 192, 192) transparent;
+  }
+
+  .select2-container .select2-selection--single .select2-selection__rendered {
+      padding-left: 14px;
+      padding-right: 25px;
+  }
+
+  .select2-container .select2-selection--single {
+      height: calc(1.5em + .75rem + 2px) !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+      position: relative;
+      margin-right: 14px;
+  }
+
+  /* multiple */
+
+  .select2-container--default .select2-selection--multiple {
+      border: solid #aaa 1px;
+      height: 60px !important;
+  }
+
+  .select2-container--default.select2-container--focus .select2-selection--multiple {
+      border: solid rgb(139, 139, 139) 1px !important;
+      display: flex;
+      align-items: center;
+  }
+
+  .select2-container--default .select2-selection--multiple {
+      display: flex;
+      align-items: center;
+  }
+
+  .select2-container--default.select2-container--focus .select2-selection--multiple li,
+  .select2-container--default .select2-selection--multiple .select2-selection__choice,
+  .select2-container--default .select2-search--inline .select2-search__field {
+      margin-top: 0 !important;
+  }
+
+  .select2-selection--multiple {
+      overflow: overlay;
+  }

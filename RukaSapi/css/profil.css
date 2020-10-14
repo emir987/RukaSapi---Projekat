@@ -1,0 +1,21 @@
+.ljubimac-kartica{
+    max-width: 200px;
+    box-shadow: 0 1px 14px 0 rgba(0,0,0,.19);
+}
+
+.ljubimac-kartica img{
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid black;
+}
+
+.ljubimac-kartica>.ime{
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.ljubimac-kartica>.info{
+        padding: 10px;
+}
