@@ -132,7 +132,7 @@ function findSitters(lat, lng) {
                 if (b > 1) break;
                 html += '<p>' + allReviews[b];
                 if (allReviews[b].length > 20) {
-                    html += '<a href="sitterPage.php?id=' + sitters[a].id + '//#comments"> (see more...)</a>' + '</p>';
+                    html += '<a href="sitterPage.php?id=' + sitters[a].id + '//#comments"> (vidi više...)</a>' + '</p>';
                 }
             }
             html += '</div>';
