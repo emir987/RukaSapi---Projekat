@@ -17,6 +17,7 @@ $maxWeight = strip_tags($maxWeight);
 $maxWeight = htmlspecialchars($maxWeight);
 
 $lat = $_POST['lat'];
+$address = $_POST['address'];
 
 $lng = $_POST['lng'];
 
@@ -64,8 +65,8 @@ if (!$error) {
     $idUser = (int)$idUser;
     $datetime = date_create()->format('Y-m-d H:i:s');
 
-    $upit = $connect->prepare("INSERT INTO sitters (petWeightMax, mainMessage, info, price, date, idUser, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $upit->bind_param("sssisidd", $maxWeight,  $motivation, $info, $price, $datetime, $idUser, $lat, $lng);
+    $upit = $connect->prepare("INSERT INTO sitters (petWeightMax, mainMessage, info, price, date, idUser, latitude, longitude, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $upit->bind_param("sssisidds", $maxWeight,  $motivation, $info, $price, $datetime, $idUser, $lat, $lng, $address);
     $result = $upit->execute();
     $upit->close();
 

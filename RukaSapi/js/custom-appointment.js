@@ -104,7 +104,7 @@ function findSitters(lat, lng) {
             html += '<div class="" id="FirstHeaderText">';
             var start = document.getElementById('startDateID').value;
             html += `<div class="d-flex"><h3><a class="text-success" href="sitterPage.php?id=${sitters[a].id}&start=${start}">${sitters[a].name} ${sitters[a].surname}</a></h3><div class="stars-rating">${starsHTML}</div></div>`;
-            html += '<span class="font-size text-dark font-weight-bold">' + sitters[a].mainMessage + '</span><br><br>';
+            html += `<div>Adresa: ${sitters[a].address}</div><span class="font-size text-dark font-weight-bold">${sitters[a].mainMessage}</span><br><br>`;
             html += '<span class="pointer font-weight-bolder text-uppercase small border border-success text-success p-1 border-10 border-dotted">' + sitters[a].reviews + ' reviews</span><br>';
             html += '</div>';
 

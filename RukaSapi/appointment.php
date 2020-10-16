@@ -329,6 +329,7 @@ session_start();
 
     var lat_input = '';
     var lng_input = '';
+    var address = '';
 
     function becomeSitter(e) {
         e.preventDefault();
@@ -341,7 +342,8 @@ session_start();
 
         formData.append('lat', lat_input);
         formData.append('lng', lng_input);
-        
+        formData.append('address', address);
+
 
         var motivationError = document.getElementById('motivationError');
         var infoRegError = document.getElementById('infoRegError');
@@ -405,11 +407,12 @@ session_start();
             const lat = near_place.geometry.location.lat().toString();
             const lng = near_place.geometry.location.lng().toString();
            
+            address = near_place.formatted_address;
             lat_input = lat;
             lng_input = lng
             console.log(lat)
             console.log(lng)
-            console.log('')
+            console.log(near_place.formatted_address)
 
         });
     })
