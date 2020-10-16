@@ -13,7 +13,7 @@ require_once "../config/connect.php";
 $latitude = (float)$_POST['lat'];
 $longitude = (float)$_POST['lng'];
 
-$query = "SELECT *, (6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians( latitude )))) AS distance 
+$query = "SELECT *, sitters.address as adresa, (6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians( latitude )))) AS distance 
 FROM sitters, users
 WHERE sitters.idUser = users.id
 HAVING distance < 10";
@@ -35,7 +35,7 @@ if ($result->num_rows > 0) {
         $sitter["surname"] = $row["surname"];
         $sitter["email"] = $row["email"];
         $sitter["phone"] = $row["phone"];
-        $sitter["address"] = $row["address"];
+        $sitter["address"] = $row["adresa"];
         $sitter["price"] = $row["price"];
         $sitter["image"] = $row["photo"];
         $sitter["distance"] = $row["distance"];
