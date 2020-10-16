@@ -395,6 +395,8 @@ function addPet(event) {
         data.append(formData[i].name, formData[i].value);
     }
 
+
+
     http.open(method, url, asynchronous);
     http.send(data);
 

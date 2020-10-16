@@ -13,7 +13,6 @@ if (isset($_SESSION['id'])){
     $idUser = $_SESSION['id'];
 }
 
-
 $result = $connect->query("SELECT * FROM request where userID = '$idUser' order by status");
 
 
@@ -35,7 +34,8 @@ if ($result->num_rows > 0) {
         $sitter["email"] = $rowSitter["email"];
         $sitter["phone"] = $rowSitter["phone"];
         $sitter["photo"] = $rowSitter["photo"];
-        
+        $sitter["idSitter"] = $rowSitter["id"];
+
 
         //request
         $idRequest = $row['id'];
@@ -50,6 +50,7 @@ if ($result->num_rows > 0) {
         $request["siterID"] = $row['sitterID'];
         $request["status"] = $row['status'];
         $request["breed"] = $row['breed'];
+        $request["rated"] = $row['rated'];
         $sitterID = $row['sitterID'];
 
         $resultChange = $connect->query("SELECT * FROM change_appointment_pending where request_id = '$idRequest'");

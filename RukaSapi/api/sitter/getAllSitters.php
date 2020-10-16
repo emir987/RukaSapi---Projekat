@@ -9,30 +9,14 @@ if (isset($_SESSION['id'])){
 }
 require_once "../config/connect.php";
 
-if (isset($_POST['userID'])){
-    $userID = $_POST['userID'];
-}
-$location = $_POST['location'];
 
-$weight = $_POST['weight'];
-// if (isset($_POST['types'])){
-//     $types = $_POST['types'];
-//     $types = json_decode($types);
-// }
+$latitude = (float)$_POST['lat'];
+$longitude = (float)$_POST['lng'];
 
-// if (isset($_POST['androidTypes'])){
-//     $types = $_POST['androidTypes'];
-// }
-
-// if ($types[0] && $types[1]){
-//     $query = "SELECT * FROM sitters s INNER JOIN users u ON u.id = s.idUser AND u.zip = '$location' AND s.petWeightMax > '$weight' GROUP BY u.id";
-// }elseif ($types[0] && !$types[1]){
-//     $query = "SELECT * FROM sitters s INNER JOIN users u ON u.id = s.idUser AND u.zip = '$location' AND s.petWeightMax > '$weight'  AND s.dog = '1' GROUP BY u.id";
-// }else{
-//     $query = "SELECT * FROM sitters s INNER JOIN users u ON u.id = s.idUser AND u.zip = '$location' AND s.petWeightMax > '$weight'  AND s.cat = '1' GROUP BY u.id";
-// }
-
-$query = "SELECT * FROM sitters s INNER JOIN users u ON u.id = s.idUser AND u.zip = '$location' AND s.petWeightMax > '$weight' GROUP BY u.id";
+$query = "SELECT *, (6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians( latitude )))) AS distance 
+FROM sitters, users
+WHERE sitters.idUser = users.id
+HAVING distance < 10";
 
 
 $result = $connect->query($query);
@@ -54,19 +38,25 @@ if ($result->num_rows > 0) {
         $sitter["address"] = $row["address"];
         $sitter["price"] = $row["price"];
         $sitter["image"] = $row["photo"];
+        $sitter["distance"] = $row["distance"];
         $sitter["mainMessage"] = $row["mainMessage"];
 
-        $reviews = "SELECT review FROM review WHERE reviewSitterID = '$sitterID'";
+        $reviews = "SELECT message, stars FROM sitter_rating WHERE id_sitter = '$sitterID'";
         $reviewResult = $connect->query($reviews);
         $sitter['allReviews'] = array();
+        $starsSum = 0;
+        $reviewsCount = 0;
         while($rowReview = $reviewResult->fetch_assoc()){
-
-            $eachReview = substr($rowReview['review'], 0,85);
+            
+            $starsSum += (int)$rowReview['stars'];
+            $reviewsCount++;
+            $eachReview = substr($rowReview['message'], 0,85);
 
             array_push($sitter['allReviews'], $eachReview);
         }
 
-
+        $sitter['reviews'] = $reviewsCount;
+        $sitter['starsSum'] = $starsSum;
 
         $countFavQuery = "SELECT COUNT(*) as favs FROM favoritesitter WHERE sitterID = '$sitterID'";
         $countFavResult = $connect->query($countFavQuery);
@@ -81,11 +71,6 @@ if ($result->num_rows > 0) {
         }else{
             $sitter["favorite"] = 'no';
         }
-
-        $countReviewsQuery = "SELECT COUNT(*) as totalReviews, review from review WHERE reviewSitterID = '$sitterID'";
-        $countReviewsQuery = $connect->query($countReviewsQuery);
-        $rowReviews = $countReviewsQuery->fetch_assoc();
-        $sitter['reviews'] = $rowReviews['totalReviews'];
 
 
         // push single product into final response array

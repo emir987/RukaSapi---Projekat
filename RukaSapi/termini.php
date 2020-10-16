@@ -356,6 +356,38 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-rating" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content px-4 py-2" style="border-radius: 1.2rem; margin-top:6rem;">
+                <h2 class="text-center mt-2">Ocijeni uslugu šetača</h2>
+                <form id="ratingForm" class="p-3 mt-3 form-border">
+                    <div class="form-group my-4">
+                        <label id="checkEmail" for="email" class="text-center h5 mb-3">Ocjena od 1 do 5</label>
+                        <div class="rating">
+                            <input type="radio" name="star" value="5" id="star1"><label id="star-error" for="star1" data-error="Odaberite broj zvjezdica" data-placement="right"></label>
+                            <input type="radio" name="star" value="4" id="star2"><label for="star2"></label>
+                            <input type="radio" name="star" value="3" id="star3"><label for="star3"></label>
+                            <input type="radio" name="star" value="2" id="star4"><label for="star4"></label>
+                            <input type="radio" name="star" value="1" id="star5"><label for="star5"></label>
+                            <input checked type="radio" name="star" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label id="checkPw" for="password" class="text-center h5">Poruka (opciono)</label>
+                        <textarea class="form-control" placeholder="Recite nesto više..." name="message" id="" rows="5"></textarea>
+                        <span id="passwordError" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" name="sitter_id" id="rating_id">
+                    <input type="hidden" name="request_id" id="request_id">
+
+                    <button onclick="rateSitter()" name="submit" type="button"
+                            class="btn btn-success btn-block mt-3 btn-log">Pošalji
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="content-profil">
         <div class="banner-termini" style="margin-top:55px">
             <div class="banner-space">
@@ -524,22 +556,29 @@
                 for (var a = 0; a < requests.length; a++) {
 
                     const request = requests[a];
+                    let rating_btn = ''; 
+
+                    let otkaziBtn = 'Otkaži';
+
+                    let changeHTML = '';
 
                     let statusHTML = '';
                     if (request.status == 'Aktivan') {
                         statusHTML = '<span style="color:#d67600">Aktivan</span>'
+                        if (request.change == 1) {
+                            changeHTML = `<img src="res/images/warning.png" style="cursor:pointer" onclick="openChangeDate(${request.id})" width=30 height=30 data-toggle="tooltip" title="Predlog promjene termina">`;
+                        }
                     }else if(request.status == 'Zavrsen'){
+                        otkaziBtn = 'Obriši'
                         statusHTML = '<span style="color:green">Završen</span>'
+                        rating_btn = `<button class="btn btn-outline-success btn-cus" onclick="openRating(${request.siterID}, ${request.id})" >Ocijeni</button>`;
                     }
+
 
                     var formattedDateSecond = requests[a].date.substring(0, 10);
                     var formattedDate = formattedDateSecond + " :: " + requests[a].date.substring(10, 16) + 'h';
                     
-                    let changeHTML = '';
-
-                    if (request.change == 1) {
-                        changeHTML = `<img src="res/images/warning.png" style="cursor:pointer" onclick="openChangeDate(${request.id})" width=30 height=30 data-toggle="tooltip" title="Predlog promjene termina">`;
-                    }
+                    
 
                     html += `<div id="otkaz${request.id}" class="termin"><div class="termin-header mb-2">
                                 <div class="termin-broj">Zahtjev: #${a + 1}</div>
@@ -573,10 +612,15 @@
                             <div class="termin-footer d-flex">
                                 <div class="termin-kreirano">Kreirano: ${formattedDate}</div>
                                 <div class="termin-buttons">
-                                    <button class="otkazii btn btn-outline-danger btn-cus" onclick="rejectRequest(${request.id}, this, '${request.breed}','${request.sitter.email}', '${request.start}')">Otkazi</button>
-                                    <button class="btn btn-outline-info btn-cus" onclick="showMessage(${request.id}, this)">Prikaži više</button>
-                                </div>
-                            </div></div>`
+                                    <button class="otkazii btn btn-outline-danger btn-cus" onclick="rejectRequest(${request.id}, this, '${request.breed}','${request.sitter.email}', '${request.start}')">${otkaziBtn}</button>`;
+                                    if (request.rated == 0) {
+                                    html += `<button class="btn btn-outline-info btn-cus ml-1" onclick="showMessage(${request.id}, this)">Prikaži više</button>
+                                    ${rating_btn}`;
+                                    }
+                                  
+                    html +=`    </div>
+                            </div>
+                        </div>`
                 }
             
 
@@ -861,23 +905,7 @@
             }
         };
 
-        function showError(element) {
-            $(element).attr('data-original-title', element.dataset.error)
-            $(element).tooltip('show');
-            $(element).on('shown.bs.tooltip', function () {
-                element.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                });
-            })
-            return false;
-        }
-
-        function removeInvaild(element) {
-            $(element).attr('data-original-title', '');
-            $(element).tooltip('hide');
-            return true;
-        }
+        
 
         function changeRequest(idRequest, element, date) {
 
@@ -954,6 +982,83 @@
                     }
                 })
             }
+
+
+        function openRating(id, request_id) {
+            $('#rating_id').val(id);
+            $('#request_id').val(request_id);
+            $('#modal-rating').modal('show');
+
+        }
+
+
+        function rateSitter() {
+
+            const form = document.getElementById('ratingForm');
+            const formData = new FormData(form);
+
+        
+            console.log($('input[name=star]:checked', '#ratingForm').val())
+
+            if ($('input[name=star]:checked', '#ratingForm').val() == 0) {
+            showError($('#star-error')[0])
+                return;
+            }else{
+                removeInvaild($('#star-error')[0])
+            }
+
+            const http = new XMLHttpRequest();
+            const method = "POST";
+            const url = "api/sitter/rate.php?";
+            const asynchronous = true;
+
+            http.open(method, url, asynchronous);
+            http.send(formData);
+
+            http.onload = function () {
+                const data = JSON.parse(this.responseText);
+                console.log(data);      
+                if (data.success == 1) {
+                    Swal.fire(
+                            'Poslato!',
+                            'Uspješno ste ocijenili uslugu. Hvala Vam!',
+                            'success'
+                            )
+                $('#modal-rating').modal('hide');
+                form.reset();
+                }          
+            }
+        
+        }
+
+        $('.modal').on('shown.bs.modal', function (e) {
+            $('.tooltip-inner').css('display','none');
+            $('.arrow').css('display','none');
+        })
+
+        $('.modal').on('hidden.bs.modal', function (e) {
+            $('.tooltip-inner').css('display','block');
+            $('.arrow').css('display','block');
+        })
+
+
+        function showError(element) {
+            $(element).attr('data-original-title', element.dataset.error)
+            $(element).tooltip('show');
+            $(element).on('shown.bs.tooltip', function () {
+                element.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            })
+            return false;
+        }
+
+        function removeInvaild(element) {
+            $(element).attr('data-original-title', '');
+            $(element).tooltip('hide');
+            return true;
+        }
     </script>
 
 

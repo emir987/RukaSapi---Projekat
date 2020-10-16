@@ -21,8 +21,10 @@ session_start();
     <link rel="stylesheet" href="css/custom.css">
 
     <link rel="stylesheet" href="css/nav.css">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyCgWIZwmJWJYBTkbc4CpQK9rld7zpWm1to"></script>
 
 </head>
 </head>
@@ -39,11 +41,28 @@ session_start();
         font-size: 4rem;
         font-weight:400;
     }
+
+    .pac-container {
+        background-color: #FFF;
+        z-index: 20;
+        position: fixed;
+        display: inline-block;
+        float: left;
+    }
+    .modal{
+        z-index: 20;   
+    }
+    .modal-backdrop{
+        z-index: 10;        
+    }​
+
     @media only screen and (max-width: 991px) {
     .banner-appointment{
             display:none;
         }
     }
+
+    
 </style>
 
    <header>
@@ -210,34 +229,40 @@ session_start();
         <div class="modal-dialog" role="document">
             <div class="modal-content px-4 py-2" style="border-radius: 1.2rem; margin-top:6rem;">
                 <h2 class="text-center mt-2">Postani šetač pasa</h2>
-                <form id="becomeForm" action="api/sitter/register.php" method="post" class="form-container-reg">
-
-                <div class="form-group mt-4">
-                    <label for="motivation" class="login-font">Motivaciona poruka</label>
-                    <input name="motivation" type="text" class="form-control" id="motivation" autocomplete="off">
-                    <span class="text-danger" id="motivationError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="infoReg" class="login-font">Više informacija</label>
-                    <textarea name="info" class="form-control" id="infoReg" autocomplete="off"></textarea>
-                    <span class="text-danger" id="infoRegError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="maxPetWeigh" class="login-font">Maksimalna težina psa za šetanje</label>
-                    <input name="maxWeight" type="text" class="form-control" id="maxWeight">
-                    <span class="text-danger" id="maxWeightError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="price" class="login-font">Cijena</label>
-                    <input name="price" type="text" class="form-control" id="price">
-                    <span class="text-danger" id="maxWeightError"></span>
-                </div>
-               
-                <button name="submit" onclick="becomeSitter()" style="margin: 30px auto 0 auto;" type="button"
-                        class="btn btn-success m-auto d-block">
-                    Prijavi se
-                </button>
-            </form>
+                <form id="becomeForm">
+                    <div class="form-group mb-2 mt-4">
+                        <label for="location-become" class="login-font">Lokacija za šetanje</label>
+                        <input name="address" type="text" class="form-control" id="location_become" placeholder="">
+                        <span class="text-danger" id="motivationError"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="motivation" class="login-font">Motivaciona poruka</label>
+                        <input name="motivation" type="text" class="form-control" id="motivation" autocomplete="off">
+                        <span class="text-danger" id="motivationError"></span>
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="infoReg" class="login-font">Više informacija</label>
+                        <textarea name="info" class="form-control" id="infoReg" autocomplete="off"></textarea>
+                        <span class="text-danger" id="infoRegError"></span>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="form-group my-2 mr-2">
+                            <label for="maxPetWeigh" class="login-font">Max težina psa</label>
+                            <input name="maxWeight" type="text" class="form-control" id="maxWeight">
+                            <span class="text-danger" id="maxWeightError"></span>
+                        </div>
+                        <div class="form-group my-2 ml-2">
+                            <label for="price" class="login-font">Cijena</label>
+                            <input name="price" type="text" class="form-control" id="price">
+                            <span class="text-danger" id="maxWeightError"></span>
+                        </div>
+                    </div>
+                
+                    <button name="submit" onclick="becomeSitter(event)" style="margin: 30px auto 0 auto;" type="button"
+                            class="btn btn-success m-auto d-block w-100">
+                        Prijavi se
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -254,22 +279,16 @@ session_start();
     <div id="change_container" class="container-fluid">
         <div class="row mt-5">
             <div class="col-lg-3 fixme">
-                <form>
-
-                    <!--                location-->
                     <div class="form-group">
-                        <label for="location">Lokacija</label>
-                        <input oninput="findSitters()" type="text" class="form-control" id="location"
-                            placeholder="ZIP">
-                    </div>
-
+                        <label>Lokacija:</label>
+                        <input type="text" class="form-control" id="search_input" placeholder="Unesite adresu..." />
+                    </div> 
                     <!--                date-->
                     <div class="form-group">
                         <label for="startDateID">Datum</label>
                         <input oninput="findSitters()" id="startDateID" type="date" name="startDate"
                             max="2021-12-31" class="form-control">
                     </div>
-
 
 
                     <!--                pet size-->
@@ -285,7 +304,6 @@ session_start();
                                 name="sizeRadio">30+</label>
                     </div>
 
-                </form>
             </div>
             <div class="col-lg-1">
                 <div class="vl mt-n5"></div>
@@ -302,17 +320,28 @@ session_start();
     </div>
 
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
+    
     <script type="text/javascript" src="js/custom-appointment.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="js/main.js" type="text/javascript"></script>
 
     <script>
-        function becomeSitter() {
+
+    var lat_input = '';
+    var lng_input = '';
+
+    function becomeSitter(e) {
+        e.preventDefault();
+
+        console.log(lat_input);
+        console.log(lng_input);
 
         const form = document.getElementById('becomeForm');
         const formData = new FormData(form);
+
+        formData.append('lat', lat_input);
+        formData.append('lng', lng_input);
+        
 
         var motivationError = document.getElementById('motivationError');
         var infoRegError = document.getElementById('infoRegError');
@@ -341,6 +370,73 @@ session_start();
             }
         }
     }
+
+    function getLngLat(lat, lng) {
+        var http = new XMLHttpRequest();
+        var method = "POST";
+        var url = "api/sitter/getLonLat.php";
+        var asynchronous = true;
+        http.open(method, url, asynchronous);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.send('lat=' + lat + "&lng=" + lng);
+
+        http.onload = function () {
+            let data = JSON.parse(this.responseText);
+            console.log(data)
+        }
+    }
+
+    var searchInput = 'search_input';
+    var location_become = 'location_become';
+
+
+    $(document).ready(function () {
+        var autocompleteq;
+        autocompleteq = new google.maps.places.Autocomplete((document.getElementById('location_become')), {
+            types: ['geocode'],
+            componentRestrictions: {
+            country: "mne"
+            }
+        });        
+
+        google.maps.event.addListener(autocompleteq, 'place_changed', function () {
+            
+            const near_place = autocompleteq.getPlace();
+            const lat = near_place.geometry.location.lat().toString();
+            const lng = near_place.geometry.location.lng().toString();
+           
+            lat_input = lat;
+            lng_input = lng
+            console.log(lat)
+            console.log(lng)
+            console.log('')
+
+        });
+    })
+ 
+    $(document).ready(function () {
+        var autocomplete;
+        autocomplete = new google.maps.places.Autocomplete((document.getElementById('search_input')), {
+            types: ['geocode'],
+            componentRestrictions: {
+            country: "mne"
+            }
+        });
+
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            const near_place = autocomplete.getPlace();
+            const lat = near_place.geometry.location.lat().toString();
+            const lng = near_place.geometry.location.lng().toString();
+           
+            console.log(lat)
+            console.log(lng)
+            console.log('')
+
+            findSitters(lat, lng);
+
+        });
+    });
     </script>
 
 

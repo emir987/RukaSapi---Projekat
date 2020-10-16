@@ -43,10 +43,10 @@ function getWeight() {
     return selected;
 }
 
-function findSitters() {
+function findSitters(lat, lng) {
 
-    var zip = document.getElementById('location').value;
-    var weight = getWeight();
+    // var zip = document.getElementById('location').value;
+    // var weight = getWeight();
 
     var http = new XMLHttpRequest();
     var method = "POST";
@@ -57,10 +57,12 @@ function findSitters() {
 
     http.open(method, url, asynchronous);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    http.send("location=" + zip + "&weight=" + weight);
+    http.send('lat=' + lat + "&lng=" + lng);
     http.onload = function () {
         var data = JSON.parse(http.responseText);
         console.log(data);
+
+
 
         if (data.success == 0) {
             document.getElementById('sitters').innerHTML = `
@@ -75,19 +77,34 @@ function findSitters() {
 
         for (var a = 0; a < sitters.length; a++) {
 
-            html += '<div class="col-12 col-lg-5 col-md-6 mb-4 col-sm-6  p-0">';
+            html += '<div class="col-12 col-lg-4 col-md-6 mb-4 col-sm-6  p-0">';
             html += '<div class="img-wrap-app">';
             html += '<img class="card-img-top image-card" style="height: 300px" src="slike_profil/' + sitters[a].image + '" alt="' + sitters[a].name + '">';
             html += '</div></div>';
-            html += '<div style="background-color:#f2faff" class="col-12 col-lg-7 col-md-6 mb-4 col-sm-6">';
+            html += '<div style="background-color:#f2faff" class="col-12 col-lg-8 col-md-6 mb-4 col-sm-6">';
+
+            let starsHTML = '';
+            const starsSum = sitters[a].starsSum;
+            const starsCount = sitters[a].reviews;
+            const stars = Math.round(starsSum / starsCount * 10) / 10;
+            const starsArray = stars.toString().split('.');
+            console.log('starrs ' + starsArray[0] + " " + starsArray[1]);
+
+            for (let index = 0; index < parseInt(starsArray[0]); index++) {
+                starsHTML += '<i class="fa fa-star" aria-hidden="true"></i>';
+            }
+
+            if (starsArray[1] > 2 || starsArray[1] < 8) {
+                starsHTML += '<i class="fa fa-star-half" aria-hidden="true"></i>';
+            }
 
 
             //pocinje
             html += '<div class="d-flex justify-content-between" id="headerText">';
             html += '<div class="" id="FirstHeaderText">';
             var start = document.getElementById('startDateID').value;
-            html += '<h3><a class="text-success" href="sitterPage.php?id=' + sitters[a].id + '&start=' + start + '">' + sitters[a].name + " " + sitters[a].surname + '</a></h3>';
-            html += '<span class="font-size text-dark font-weight-bold">' + sitters[a].mainMessage + '</span><br>';
+            html += `<div class="d-flex"><h3><a class="text-success" href="sitterPage.php?id=${sitters[a].id}&start=${start}">${sitters[a].name} ${sitters[a].surname}</a></h3><div class="stars-rating">${starsHTML}</div></div>`;
+            html += '<span class="font-size text-dark font-weight-bold">' + sitters[a].mainMessage + '</span><br><br>';
             html += '<span class="pointer font-weight-bolder text-uppercase small border border-success text-success p-1 border-10 border-dotted">' + sitters[a].reviews + ' reviews</span><br>';
             html += '</div>';
 
@@ -114,7 +131,7 @@ function findSitters() {
             for (let b = 0; b < allReviews.length; b++) {
                 if (b > 1) break;
                 html += '<p>' + allReviews[b];
-                if (allReviews[b].length === 85) {
+                if (allReviews[b].length > 20) {
                     html += '<a href="sitterPage.php?id=' + sitters[a].id + '//#comments"> (see more...)</a>' + '</p>';
                 }
             }

@@ -6,7 +6,7 @@ require_once "../config/connect.php";
 
 $id = $_GET['id'];
 
-$result = $connect->query("SELECT * FROM review where reviewSitterID='$id'");
+$result = $connect->query("SELECT * FROM sitter_rating where id_sitter='$id'");
 
 if ($result->num_rows > 0) {
 
@@ -14,7 +14,7 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_assoc()) {
 
-        $userID = $row['reviewUserID'];
+        $userID = $row['id_user'];
 
         //Commentator
         $userSQL = $connect->query("SELECT * FROM users where id='$userID'");
@@ -28,9 +28,9 @@ if ($result->num_rows > 0) {
         //comment
         $review['id'] = $row['id'];
         $review["commentator"] = $user;
-        $review["review"] = $row["review"];
+        $review["review"] = $row["message"];
         $review["date"] = $row["date"];
-        $review["sitterID"] = $row['reviewSitterID'];
+        $review["sitterID"] = $row['id_sitter'];
 
         $time = strtotime($row["date"]);
 

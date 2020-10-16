@@ -595,7 +595,7 @@ if (isset($_SESSION['id'])){
     }
 
 
-   function openEdit(comment, id) {
+    function openEdit(comment, id) {
         document.getElementById('comment' + id).innerHTML = '<div class="row">' +
             '<textarea class="form-control" rows="2" style="width: 90%;" id="newComment" type="text">' + comment + '</textarea>' +
             '<span onclick="closeEdit(' + id + ',\'' + comment + '\')" style="cursor:pointer;font-size:1.2rem" id="deletePet" class="mx-2">&times;</span>' +

@@ -7,7 +7,7 @@ require_once "../config/connect.php";
 $id = $_POST['id'];
 
 // get a pet from pet table
-$result = $connect->query("DELETE FROM review WHERE id = '$id'");
+$result = $connect->query("DELETE FROM sitter_rating WHERE id = '$id'");
 
 
 if ($result) {
